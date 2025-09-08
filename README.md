@@ -15,7 +15,7 @@ This repository contains the implementation and testbench for an 8×8 unsigned W
 - Modular Verilog subcomponents (ANDs, Half/Full Adders)
 - Exhaustive waveforms for non-trivial test vectors
 - Detailed report and gate count analysis
-- Diagrams (hand-drawn/LaTeX/TikZ)
+- Diagrams (hand-drawn/LaTeX)
 
 ## 🏗️ Repo Structure
 
