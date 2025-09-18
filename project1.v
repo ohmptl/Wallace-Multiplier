@@ -4,6 +4,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Engineer: Ohm Patel
 // 
+// Create Date: 09/15/2025 12:09:41 AM
 // Design Name: 8 by 8 Wallace Multiplier
 // Module Name: Project1
 // Description: A gate level implementation of an 
@@ -38,9 +39,9 @@ module half_adder(
 endmodule
 
 
-module wallace_multiplier(
+module wallace_8x8(
     input [7:0] a, b,
-    output [15:0] P
+    output [15:0] prod
     );
     
     // Make all the partial sums using generate
@@ -148,23 +149,24 @@ module wallace_multiplier(
     full_adder fa46 (fc[45], fc[37], hs[14], fs[46], fc[46]);  
     half_adder ha16 (fc[46], hc[14], hs[16], hc[16]);   // Note hc[16] does not matter (8*8 bit always = 16 bits)
     
-    // Final product mapping
-    assign P[0]  = p[0][0];    // column 0
-    assign P[1]  = hs[0];      // from ha0
-    assign P[2]  = hs[4];      // from ha4
-    assign P[3]  = hs[7];      // from ha7
-    assign P[4]  = hs[11];     // from ha11
-    assign P[5]  = hs[15];     // from ha15
-    assign P[6]  = fs[38];     // from fa38
-    assign P[7]  = fs[39];     // from fa39
-    assign P[8]  = fs[40];     // from fa40
-    assign P[9]  = fs[41];     // from fa41
-    assign P[10] = fs[42];     // from fa42
-    assign P[11] = fs[43];     // from fa43
-    assign P[12] = fs[44];     // from fa44
-    assign P[13] = fs[45];     // from fa45
-    assign P[14] = fs[46];     // from fa46
-    assign P[15] = hs[16];     // final HA (MSB)
+    // Final product mapping without assign
+    buf (prod[0],  p[0][0]);   // column 0
+    buf (prod[1],  hs[0]);     // from ha0
+    buf (prod[2],  hs[4]);     // from ha4
+    buf (prod[3],  hs[7]);     // from ha7
+    buf (prod[4],  hs[11]);    // from ha11
+    buf (prod[5],  hs[15]);    // from ha15
+    buf (prod[6],  fs[38]);    // from fa38
+    buf (prod[7],  fs[39]);    // from fa39
+    buf (prod[8],  fs[40]);    // from fa40
+    buf (prod[9],  fs[41]);    // from fa41
+    buf (prod[10], fs[42]);    // from fa42
+    buf (prod[11], fs[43]);    // from fa43
+    buf (prod[12], fs[44]);    // from fa44
+    buf (prod[13], fs[45]);    // from fa45
+    buf (prod[14], fs[46]);    // from fa46
+    buf (prod[15], hs[16]);    // final HA (MSB)
+
 
 endmodule
 
@@ -174,7 +176,7 @@ endmodule
 module wallace_multiplier_tb;
     reg [7:0] a, b;
     wire [15:0] P;
-    wallace_multiplier dut(a, b, P);
+    wallace_8x8 dut(a, b, P);
     
     initial
     begin
@@ -214,6 +216,8 @@ module wallace_multiplier_tb;
         // 9) Max edge case (255 * 255 = 65025)
         a = 8'b11111111; b = 8'b11111111; 
         #10 $display("A: %b B: %b P: %b (dec=%0d)", a, b, P, P);
+
+        
 
         
     $finish;
